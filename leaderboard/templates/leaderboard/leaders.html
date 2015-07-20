@@ -1,0 +1,14 @@
+<ul class='leader-list'>
+{% for leader in leader_set.all %}
+  {% with score=leader.closed_score %}
+    <li class='leader' data-score='{{ score }}'>
+      <span class='name'>{{ leader.name }}</span>
+      <span class='score'>{{ score }}</span>
+    </li>
+  {% endwith %}
+{% empty %}
+  <li class='leader empty'>
+    No leaders yet!
+  </li>
+{% endfor %}
+</ul>
