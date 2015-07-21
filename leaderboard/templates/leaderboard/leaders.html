@@ -1,9 +1,13 @@
 {% extends "leaderboard/base.html" %}
+{% load staticfiles %}
 {% block title %}Leaders{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'leaderboard/css/leaders.css' %}">
+{% endblock %}
 {% block content %}
 <section class='leaders-section'>
 
-  <h2>Leaders</h2>
+  <h2>Coffee is for Closers</h2>
 
   <ul class='leader-list list-unstyled'>
   {% for leader in leader_set.all %}

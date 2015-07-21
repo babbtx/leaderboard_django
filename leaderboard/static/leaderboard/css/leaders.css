@@ -1,0 +1,29 @@
+.leaders-section {
+  width: 300px;
+  margin: auto;
+}
+
+.leaders-section h2 {
+  text-align: center;
+}
+
+.leaders-section .leader-list {
+  margin-top: 20px;
+  background-color: #f7f7f7;
+  box-shadow: 0px 2px 2px rgba(0,0,0,0.2);
+}
+
+.leaders-section .leader {
+  line-height: 24px;
+  border-bottom: 1px solid #a0a0a0;
+  width: 100%;
+  padding: 10px 4px;
+  position: relative;
+}
+
+.leaders-section .leader .score {
+  position: absolute;
+  right: 4px;
+  text-align: right;
+}
+  
