@@ -13,6 +13,7 @@
 
         <link rel="stylesheet" href="{% static 'leaderboard/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'leaderboard/css/bootstrap-theme.min.css' %}">
+        {% block stylesheets %}{% endblock %}
         <script src="{% static 'leaderboard/js/vendor/modernizr-2.8.3.min.js' %}"></script>
     </head>
     <body>
@@ -22,5 +23,7 @@
         </div> <!-- /container -->
         <script src="{% static 'leaderboard/js/vendor/jquery-1.11.2.min.js' %}"></script>
         <script src="{% static 'leaderboard/js/vendor/bootstrap.min.js' %}"></script>
+        <script src="{% static 'leaderboard/js/vendor/isotope.pkgd.min.js' %}"></script>
+	{% block scripts %}{% endblock %}
     </body>
 </html>

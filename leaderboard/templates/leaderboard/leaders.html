@@ -8,7 +8,7 @@
   <ul class='leader-list list-unstyled'>
   {% for leader in leader_set.all %}
     {% with score=leader.closed_score %}
-      <li class='leader' data-score='{{ score }}'>
+      <li class='leader'>
         <span class='name'>{{ leader.name }}</span>
         <span class='score'>{{ score }}</span>
       </li>
@@ -21,4 +21,26 @@
   </ul>
 
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function(){
+  'use strict';
+
+  /* initialize list sort by name */
+  var $list = $('.leader-list').isotope({
+    itemSelector: 'li.leader:not(.empty)',
+    layoutMode: 'vertical',
+    getSortData: {
+      name: function(elt){ return $(elt).find('.name').text(); },
+      score: function(elt){ return 0 - parseInt($(elt).find('.score').text()); },
+    },
+    sortBy: 'name',
+  });
+  /* then immediately switch to score for the visual effect */
+  $list.isotope({sortBy: 'score'});
+
+});
+</script>
 {% endblock %}
