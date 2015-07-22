@@ -10,6 +10,7 @@
         <title>{% block title %}Leaderboard{% endblock %}</title>
         <meta name="description" content="Spiceworks Example App">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token }}">
 
         <link rel="stylesheet" href="{% static 'leaderboard/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'leaderboard/css/bootstrap-theme.min.css' %}">
