@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^leaderboard[/$]', include('leaderboard.urls')),
+    url(r'^/?$', include('leaderboard.urls')),
 #    url(r'^admin/', include(admin.site.urls)),
 ]
