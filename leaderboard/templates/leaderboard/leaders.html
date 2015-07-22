@@ -12,7 +12,7 @@
   <ul class='leader-list list-unstyled'>
   {% for leader in leader_set.all %}
     {% with score=leader.closed_score %}
-      <li class='leader'>
+      <li class='leader' data-name='{{ leader.name }}'>
         <span class='name'>{{ leader.name }}</span>
         <span class='score'>{{ score }}</span>
       </li>
@@ -26,8 +26,8 @@
 
 </section>
 {% endblock %}
-
 {% block scripts %}
+<script src="{% static 'leaderboard/js/leaders.js' %}"></script>
 <script>
 $(document).ready(function(){
   'use strict';
@@ -44,6 +44,41 @@ $(document).ready(function(){
   });
   /* then immediately switch to score for the visual effect */
   $list.isotope({sortBy: 'score'});
+
+  /* extract the existing list from the DOM */
+  var existing = [];
+  $list.find('.leader').each(function(){
+    var name = $(this).find('.name').text();
+    var score = $(this).find('.score').text();
+    existing.push({name: name, score: score});
+  });
+
+  var leaderboard = new Leaderboard(existing);
+
+  /* on update save, update the DOM and force isotope to reread values and resort */
+  leaderboard.on('updated', function(evt, updates){
+    $.each(updates, function(_,leader){
+      $list.find('.leader[data-name="' + leader.name + '"] .score').text(leader.score);
+    });
+    $list.isotope('updateSortData').isotope();
+  });
+
+  /* on new values saved, use isotope to append to the list and DOM */
+  leaderboard.on('added', function(evt, adds){
+    var html = "<li class='leader'><span class='name'></span><span class='score'></span></li>";
+    var elts = [];
+    $.each(adds, function(_,leader){
+      var $elt = $(html);
+      $elt.attr('data-name', leader.name);
+      $elt.find('.name').text(leader.name);
+      $elt.find('.score').text(leader.score);
+      elts.push($elt[0]);
+    });
+    $list.isotope('insert', elts);
+  });
+
+  // attach to the window for debugging
+  window.leaderboard = leaderboard;
 
 });
 </script>
