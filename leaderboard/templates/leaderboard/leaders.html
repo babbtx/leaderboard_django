@@ -19,7 +19,7 @@
     {% endwith %}
   {% empty %}
     <li class='leader empty'>
-      No one yet! Get started!
+     <span class='name'>No one yet!</span>
     </li>
   {% endfor %}
   </ul>
@@ -40,7 +40,7 @@ $(document).ready(function(){
 
   /* initialize list sort by name */
   var $list = $('.leader-list').isotope({
-    itemSelector: 'li.leader:not(.empty)',
+    itemSelector: 'li.leader',
     layoutMode: 'vertical',
     getSortData: {
       name: function(elt){ return $(elt).find('.name').text(); },
@@ -53,13 +53,14 @@ $(document).ready(function(){
 
   /* extract the existing list from the DOM */
   var existing = [];
-  $list.find('.leader').each(function(){
+  $list.find('.leader:not(.empty)').each(function(){
     var name = $(this).find('.name').text();
     var score = $(this).find('.score').text();
     existing.push({name: name, score: score});
   });
 
   var leaderboard = new Leaderboard("{{ company_uid|escapejs }}", existing);
+  var wasEmpty = $list.find('.leader.empty').length > 0;
 
   /* on update save, update the DOM and force isotope to reread values and resort */
   leaderboard.on('updated', function(evt, updates){
@@ -81,6 +82,10 @@ $(document).ready(function(){
       $elt.find('.score').text(leader.score);
       elts.push($elt[0]);
     });
+    if (wasEmpty){
+      $list.isotope('remove', $list.isotope('getItemElements'));
+      wasEmpty = false;
+    }
     $list.isotope('insert', elts);
     $('#last-updated').text("Last updated " + (new Date()).toString());
   });

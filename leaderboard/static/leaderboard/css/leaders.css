@@ -29,6 +29,10 @@
   position: relative;
 }
 
+.leaders-section .leader.empty {
+  text-align: center;
+}
+
 .leaders-section .leader .score {
   position: absolute;
   right: 4px;
