@@ -59,7 +59,7 @@ $(document).ready(function(){
     existing.push({name: name, score: score});
   });
 
-  var leaderboard = new Leaderboard(existing);
+  var leaderboard = new Leaderboard("{{ company_uid|escapejs }}", existing);
 
   /* on update save, update the DOM and force isotope to reread values and resort */
   leaderboard.on('updated', function(evt, updates){

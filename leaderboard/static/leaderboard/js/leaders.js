@@ -20,13 +20,14 @@
   /**
     * Maintains a leaderboard of names ans scores in memory and persists to the server.
     *
-    * Initialize with array of objects {name: ..., score: ...}.
+    * Initialize with company identifier and array of leader objects {name: ..., score: ...}.
     *
     * Add values with add().
     *
     * Subscribe to events 'updated' and 'added'.
     */
-  function Leaderboard(leaders){
+  function Leaderboard(uid, leaders){
+    this.uid = uid;
     this.leaders = createLeadersHash(leaders);
     this.eventsDelegate = $({});
   };
@@ -77,7 +78,7 @@
         adds = [adds];
       }
       $.ajax({
-        url: '/leaderboard/Vandalay Industries/',
+        url: '/leaderboard/' + this.uid + '/',
         data: JSON.stringify(adds),
         contentType: 'application/json',
         dataType: 'JSON',
