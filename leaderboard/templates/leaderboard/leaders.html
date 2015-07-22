@@ -24,6 +24,12 @@
   {% endfor %}
   </ul>
 
+  {% if last_updated %}
+    <p id='last-updated' data-isodate='{{ last_updated|date:'c' }}'>Last updated {{ last_updated|date:'r' }}</p>
+  {% else %}
+    <p id='last-updated'></p>
+  {% endif %}
+
 </section>
 {% endblock %}
 {% block scripts %}
@@ -61,6 +67,7 @@ $(document).ready(function(){
       $list.find('.leader[data-name="' + leader.name + '"] .score').text(leader.score);
     });
     $list.isotope('updateSortData').isotope();
+    $('#last-updated').text("Last updated " + (new Date()).toString());
   });
 
   /* on new values saved, use isotope to append to the list and DOM */
@@ -75,6 +82,7 @@ $(document).ready(function(){
       elts.push($elt[0]);
     });
     $list.isotope('insert', elts);
+    $('#last-updated').text("Last updated " + (new Date()).toString());
   });
 
   // attach to the window for debugging

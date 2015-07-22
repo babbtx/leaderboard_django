@@ -19,8 +19,13 @@ def company(request, company_uid):
 
 # this is an HTML response of all company leaders
 def render_company_leaders(request, company_uid):
-    company = Company.objects.get_or_create(uid=company_uid)[0]
-    return render(request, 'leaderboard/leaders.html', {'leader_set': company.leader_set})
+    pair = Company.objects.get_or_create(uid=company_uid)
+    company = pair[0]
+    last_updated = company.updated if pair[1] == False else None
+    return render(request, 'leaderboard/leaders.html',
+                  {'leader_set': company.leader_set,
+                  'company_uid': company.uid,
+                  'last_updated': last_updated})
 
 
 # this is a JSON API for company leaders
