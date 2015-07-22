@@ -1,12 +1,48 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+import json
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
+from django.db import transaction
 from .models import Company
-
 
 def index(request):
     return render(request, 'leaderboard/index.html', {})
 
 
+@require_http_methods(['POST', 'GET'])
 def company(request, company_uid):
-    company = get_object_or_404(Company, uid=company_uid)
+    if request.method == 'POST':
+        return update_company_leaders(request, company_uid)
+    else:
+        return render_company_leaders(request, company_uid)
+
+
+# this is an HTML response of all company leaders
+def render_company_leaders(request, company_uid):
+    company = Company.objects.get_or_create(uid=company_uid)[0]
     return render(request, 'leaderboard/leaders.html', {'leader_set': company.leader_set})
+
+
+# this is a JSON API for company leaders
+def update_company_leaders(request, company_uid):
+    if request.META['CONTENT_TYPE'] != 'application/json':
+        return HttpResponseBadRequest(request.META['CONTENT_TYPE'], status=415)
+
+    jarray = json.loads(request.body.decode('UTF-8'))
+
+    # handle the input
+    with transaction.atomic():
+        company = Company.objects.get_or_create(uid=company_uid)[0]
+        for jleader in jarray:
+           leader = company.leader_set.get_or_create(name=jleader['name'])[0]
+           leader.score_set.create(category='closed', score=jleader['score'])
+        company.save() # force timestamp and transaction collision
+    
+    # compile a response
+    # JSON of name and score for every leader
+    data = []
+    for leader in company.leader_set.all():
+        data.append({'name': leader.name, 'score': leader.closed_score()})
+    
+    return JsonResponse(data, safe=False)
+
