@@ -1,3 +1,5 @@
+/* original spinner credit to http://stephanwagner.me/only-css-loading-spinner. */
+
 @keyframes loading-spinner {
     to {transform: rotate(360deg);}
 }
@@ -12,6 +14,7 @@
     position:relative;
 }
  
+/* mask the content under the spinner */
 .loading-spinner:before {
     content: '';
     position: absolute;
@@ -21,6 +24,7 @@
     z-index: 1000;
 }
 
+/* drop the spinner on top of the mask */
 .loading-spinner:after {
     content: '';
     position: absolute;
